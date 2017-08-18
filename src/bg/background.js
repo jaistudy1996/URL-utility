@@ -1,13 +1,20 @@
-// if you checked "fancy-settings" in extensionizr.com, uncomment this lines
+/* jshint esversion:6*/
 
-// var settings = new Store("settings", {
-//     "sample_setting": "This is how you use Store.js to remember values"
-// });
+// get active tab and connect to port named redirect and set up
 
-
-//example of using a message handler from the inject scripts
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-  	console.log(request, sender);
-    sendResponse({background: "background"});
+chrome.runtime.onConnect.addListener(function(port){
+  port.onMessage.addListener(function(response){
+    console.log(response);
+    let xhr = new XMLHttpRequest();
+  	xhr.responseType = 'json';
+  	xhr.onreadystatechange = function(){
+      console.log(this);
+  		if(this.readyState == 4 && this.status == 200){
+          port.postMessage(xhr.responseURL);
+  				console.log(xhr.responseURL);
+  		}
+  	};
+    xhr.open("GET", response.url, true);
+    xhr.send();
   });
+});

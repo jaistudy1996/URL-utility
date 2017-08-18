@@ -1,18 +1,22 @@
+/* jshint esversion:6 */
+// Global variables
+var selectedText = "";
+var urlRegEx = /(([\w]+:)?\/\/)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,253}[\d\w]\.)+[\w]{2,63}(:[\d]+)?(\/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?/;
 
 
+var port = chrome.runtime.connect({name: "redirect"});
+window.onload = function(){
+	console.log("doc loaded");
+	document.onmouseup = function(){
+		selectedText = window.getSelection().toString();
+		if(urlRegEx.test(selectedText)){
+			// send seleted text to background
+			port.postMessage({url: selectedText});
+		}
+	};
+};
 
-// message handler between background script
-chrome.extension.sendMessage({test: "test"}, function(response) {
-	var readyStateCheckInterval = setInterval(function() {
-	if (document.readyState === "complete") {
-		clearInterval(readyStateCheckInterval);
-
-		// ----------------------------------------------------------
-		// This part of the script triggers when page is done loading
-		console.log("Hello. This message was sent from scripts/inject.js");
-		console.log(response);
-		// ----------------------------------------------------------
-
-	}
-	}, 10);
+port.onMessage.addListener(function(response){
+	console.log(response);
+	alert(response);
 });
