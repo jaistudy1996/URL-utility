@@ -18,5 +18,9 @@ window.onload = function(){
 
 port.onMessage.addListener(function(response){
 	console.log(response);
-	alert(response);
+	console.log(window.getSelection());
+	window.getSelection().anchorNode.parentNode.onmouseover = function(e){
+		console.log('testing');
+		nhpup.popup("hello");
+	};
 });

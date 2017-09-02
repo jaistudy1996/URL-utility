@@ -1,6 +1,6 @@
 {
   "name": "URL utility",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "manifest_version": 2,
   "description": "Expand and mimize urls",
   "homepage_url": "http://www.jayantarora.com",
@@ -30,7 +30,9 @@
         "<all_urls>"
       ],
       "js": [
-        "src/inject/inject.js"
+        "src/inject/inject.js",
+        "js/jquery/jquery.min.js",
+        "js/nhpup_1.1/nhpup_1.1.js"
       ],
       "run_at": "document_end"
     }
