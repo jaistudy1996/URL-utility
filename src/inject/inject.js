@@ -9,11 +9,18 @@ window.onload = function(){
 	console.log("doc loaded");
 	document.onmouseup = function(){
 		selectedText = window.getSelection().toString();
-		if(urlRegEx.test(selectedText)){
-			// send seleted text to background
-			port.postMessage({url: selectedText});
-		}
+		sendReqToBackground(selectedText);
+		// if(urlRegEx.test(selectedText)){
+		// 	// send seleted text to background
+		// 	port.postMessage({url: selectedText});
+		// }
 	};
+	let anchorTags = document.getElementsByTagName('a');
+	for(let i=0; i<anchorTags.length; i++){
+		anchorTags[i].onmouseover = function(){
+			sendReqToBackground(anchorTags[i].href);
+		};
+	}
 };
 
 port.onMessage.addListener(function(response){
@@ -24,3 +31,9 @@ port.onMessage.addListener(function(response){
 		nhpup.popup("hello");
 	};
 });
+
+function sendReqToBackground(text){
+	if(urlRegEx.test(text)){
+		port.postMessage({url: text});
+	}
+}
