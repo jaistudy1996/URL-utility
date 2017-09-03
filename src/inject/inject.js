@@ -13,17 +13,18 @@ window.onload = function(){
 	};
 	let anchorTags = document.getElementsByTagName('a');
 	for(let i=0; i<anchorTags.length; i++){
-		anchorTags[i].onmouseover = function(){
-			sendReqToBackground(anchorTags[i].href);
-		};
+		sendReqToBackground(anchorTags[i].href, anchorTags[i]);
 	}
 };
 
-function sendReqToBackground(text){
+function sendReqToBackground(text, node){
 	if(urlRegEx.test(text)){
-		// port.postMessage({url: text});
 		chrome.runtime.sendMessage({url: text}, function(response) {
-		  console.log(response.responseURL);
+		  // console.log(response.responseURL);
+			// console.log(node);
+			node.onmouseover = function(){
+				nhpup.popup(`${response.responseURL}`);
+			};
 		});
 	}
 }
